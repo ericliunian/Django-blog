@@ -15,7 +15,22 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from blog import views
+from django.conf.urls import include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'', views.home, name='home'),
+    url(r'^home/', views.home, name='home'),
+    url(r'^articles/(\d+)>/', views.detail, name='detail'),
+    url(r'^category/(\d+)/', views.search_category, name='category_menu'),
+    url(r'^tag/(.+?)>/', views.search_tag, name='search_tag'),
+    url(r'^archives/(\d+)/(\d+)>', views.archives, name='archives'),
+    url(r'^summernote/', include('django_summernote.urls')),
+    url(r'^jet/', include('jet.urls', 'jet')),  # Django JET URLS
+    url(r'^jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
